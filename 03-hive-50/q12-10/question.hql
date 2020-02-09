@@ -27,4 +27,8 @@ LOAD DATA LOCAL INPATH 'data.tsv' INTO TABLE t0;
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
 
-
+INSERT OVERWRITE LOCAL DIRECTORY '../q12-10/output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT letras, valor, count(*)
+FROM cte_arr
+GROUP BY letras, valor;

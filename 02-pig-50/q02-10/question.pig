@@ -9,4 +9,13 @@ fs -rm -f -r output;
 --  >>> Escriba el codigo del mapper a partir de este punto <<<
 -- 
 
+data = LOAD 'data.tsv' USING PigStorage('\t') 
+    AS (letra_chalalay:CHARARRAY, 
+        fecha_chalalay:CHARARRAY, 
+        numero_chalalay:INT);
 
+ordenado = ORDER data BY letra_chalalay, numero_chalalay;
+redundante = FOREACH ordenado GENERATE letra_chalalay, fecha_chalalay, numero_chalalay;
+DUMP redundante;
+STORE redundante INTO 'output';
+fs -get output/ .

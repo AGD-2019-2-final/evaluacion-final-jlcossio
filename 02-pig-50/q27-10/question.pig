@@ -26,3 +26,16 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+data = LOAD 'data.csv' USING PigStorage(',') 
+    AS (registro_chalalay:INT,
+    	nombre_chalalay:CHARARRAY,
+    	apellido_chalalay:CHARARRAY,
+    	fecha_chalalay:CHARARRAY,
+    	color_chalalay:CHARARRAY,
+    	numero_chalalay:INT);
+
+nombre = FOREACH data GENERATE nombre_chalalay;
+posicion = FOREACH nombre GENERATE INDEXOF($0, 'ia', 0);
+DUMP posicion;
+STORE posicion INTO 'output';
+fs -get output/ .

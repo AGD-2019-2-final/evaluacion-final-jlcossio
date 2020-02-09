@@ -28,4 +28,16 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+data = LOAD 'data.csv' USING PigStorage(',') 
+    AS (registro_chalalay:INT,
+    	nombre_chalalay:CHARARRAY,
+    	apellido_chalalay:CHARARRAY,
+    	fecha_chalalay:CHARARRAY,
+    	color_chalalay:CHARARRAY,
+    	numero_chalalay:INT);
 
+filtro = filter data by (color_chalalay MATCHES '.*.n');
+fin = FOREACH filtro GENERATE nombre_chalalay, color_chalalay;
+DUMP fin;
+STORE fin INTO 'output';
+fs -get output/ .

@@ -14,3 +14,16 @@ fs -rm -f -r output;
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+data = LOAD 'data.tsv' USING PigStorage('\t') 
+    AS (letra_chalalay:CHARARRAY, 
+        array_chalalay:BAG{t2:TUPLE(c2:CHARARRAY)},
+        diccionario_chalalay:MAP[]);
+
+desagregado = FOREACH data GENERATE FLATTEN(array_chalalay), FLATTEN(diccionario_chalalay);
+interes = FOREACH desagregado GENERATE TOTUPLE($0, $1);
+agrupado = GROUP interes BY $0;
+conteo = FOREACH agrupado GENERATE $0, COUNT($1);
+
+DUMP conteo;
+STORE conteo INTO 'output';
+fs -get output/ .

@@ -40,4 +40,7 @@ LOAD DATA LOCAL INPATH 'tbl1.csv' INTO TABLE tbl1;
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
 
-
+INSERT OVERWRITE LOCAL DIRECTORY '../q06-10/output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT UPPER(concat_ws(':',c5))
+FROM tbl0;

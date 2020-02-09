@@ -40,4 +40,16 @@ u = LOAD 'data.csv' USING PigStorage(',')
 --
 -- >>> Escriba su respuesta a partir de este punto <<<
 --
+data = LOAD 'data.csv' USING PigStorage(',') 
+    AS (registro_chalalay:INT,
+    	nombre_chalalay:CHARARRAY,
+    	apellido_chalalay:CHARARRAY,
+    	fecha_chalalay:CHARARRAY,
+    	color_chalalay:CHARARRAY,
+    	numero_chalalay:INT);
 
+fecha = FOREACH data GENERATE fecha_chalalay, ToDate(fecha_chalalay);
+formato = FOREACH fecha GENERATE $0, SUBSTRING($0, 8, 10), GetDay($1), GetWeek($1);
+DUMP formato;
+STORE formato INTO 'output';
+fs -get output/ .
